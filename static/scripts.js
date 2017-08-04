@@ -117,7 +117,7 @@ function fillDoseSchedule(data) {
         } else {
             tr.append('<td style="font-size:12px;">' + data.drugs[i].numDoses + " " + data.drugs[i].intakeMethod + ", " + data.drugs[i].timesPerDay + " times, every " + frequency + " " + data.drugs[i].timePeriod + "</td>");
         }
-        tr.append('<td></td>'); //Today's Sched
+        tr.append('<td>' + data.drugs[i].comments + '</td>'); //Today's Sched
         tr.append('<td>' + nextDayStr + '</td>'); //Next Day
         tr.append('<td><td><button type="button" class="delete btn btn-sm" style="background-color:transparent" id="' + i + 'delete"><span class="glyphicon glyphicon-trash"></span></button></td>');
         $('#schedBody').append(tr);
@@ -469,6 +469,7 @@ function addDrugForm(data) {
             drugInfo.timesPerDay = $('#timesPerDay').val();
             drugInfo.frequency = $('#frequency').val();
             drugInfo.timePeriod = $('#timePeriod').val();
+            drugInfo.comments = $('#drugComment').val();
             if($('#startDate').val() == "") {
                 var today = new Date();
                 var todayJSON = today.toJSON();
@@ -498,6 +499,8 @@ function addDrugForm(data) {
             else {
                 drugInfo.asNeeded = "False";
             }
+
+
             data.drugs.push(drugInfo);
             chrome.storage.sync.set({userinfo: data}, function(obj) {
                 console.log('obj');
@@ -525,6 +528,7 @@ function editDrugInfo() {
             $('#timesPerDay').val(data.drugs[editIndex].timesPerDay);
             $('#frequency').val(data.drugs[editIndex].frequency);
             $('#timePeriod').val(data.drugs[editIndex].timePeriod);
+            $('#drugComment').val(data.drugs[editIndex].comments);
 
             var start = new Date(data.drugs[editIndex].startDate);
             start = start.toLocaleDateString();
@@ -537,6 +541,9 @@ function editDrugInfo() {
                 endDateStr = endDateObj.toLocaleDateString();
                 $('#endDate').val(endDateStr);
             }
+            else {
+                $('#endDate').val("");
+            }
             if(data.drugs[editIndex].asNeeded == "True") {
                 $('#asNeeded').prop('checked', true);
                 $('#timesPerDay').prop('disabled', true);
@@ -546,11 +553,20 @@ function editDrugInfo() {
                 $('#frequency').prop('disabled', true);
                 $('#frequency').css({'background-color':'grey'});
             }
+            else {
+                $('#asNeeded').prop('checked', false);
+                $('#timesPerDay').prop('disabled', false);
+                $('#timesPerDay').css({'background-color':'white'});
+                $('#timePeriod').prop('disabled', false);
+                $('#timePeriod').css({'background-color':'white'});
+                $('#frequency').prop('disabled', false);
+                $('#frequency').css({'background-color':'white'});
+            }
         });
         $('#closeDrugFormbtn').click(function() {
             $('#submitEdit').addClass('hidden');
             $('#addDrugtoSched').removeClass('hidden');
-
+            $('#drugComment').val("");
             $('#drugName').val("Drug Name");
             $('#startDate').val("");
             $('#endDate').val("");
