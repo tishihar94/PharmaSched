@@ -1,0 +1,83 @@
+{
+    "name": "New User",
+    "schedule": [
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        },
+        {
+        "wakeup": "08:30",
+        "bedtime": "00:30"
+        }
+    ],
+    "drugs": [
+        {
+            "drugName": "Medication to take today",
+            "numDoses": 1,
+            "intakeMethod": "pill(s)",
+            "timesPerDay": 1,
+            "frequency": 1,
+            "timePeriod": "day(s)",
+            "startDate": "2017-07-14T07:00:00.000Z",
+            "endDate": "",
+            "asNeeded": "False",
+            "comments": "Rows are green"
+        },
+        {
+            "drugName": "Medication taken as needed",
+            "numDoses": 1,
+            "intakeMethod": "pill(s)",
+            "timesPerDay": 1,
+            "frequency": 1,
+            "timePeriod": "day(s)",
+            "startDate": "2017-07-14T07:00:00.000Z",
+            "endDate": "",
+            "asNeeded": "True",
+            "comments": "Rows are yellow"
+        },
+        {
+            "drugName": "Finished medication",
+            "numDoses": 1,
+            "intakeMethod": "pill(s)",
+            "timesPerDay": 1,
+            "frequency": 1,
+            "timePeriod": "day(s)",
+            "startDate": "2017-07-14T07:00:00.000Z",
+            "endDate": "2017-07-31T07:00:00.000Z",
+            "asNeeded": "False",
+            "comments": "Rows are Red"
+        },
+        {
+            "drugName": "Don't need to take today",
+            "numDoses": 1,
+            "intakeMethod": "pill(s)",
+            "timesPerDay": 1,
+            "frequency": 1,
+            "timePeriod": "year(s)",
+            "startDate": "2017-07-14T07:00:00.000Z",
+            "endDate": "",
+            "asNeeded": "False",
+            "comments": "Rows are dark"
+        }
+    ]
+}

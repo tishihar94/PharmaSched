@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "PharmaSchedule",
+    "description": "This extension allows you to plan out a weekly dosing schedule for medication",
+    "version": "0.0.1",
+
+    "content_security_policy": "content-src 'self'; script-src 'self' 'unsafe-eval'; object-src 'self'",
+
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+
+    "permissions": [
+        "activeTab",
+        "https://ajax.googleapis.com/",
+        "storage"
+    ]
+}

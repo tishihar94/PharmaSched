@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" rel="stylesheet">
+
+
+    <link href="static/styles.css" rel="stylesheet" />
+    <!-- bootstrap validator stylesheet -->
+    <link href="css/bootstrapvalidator.min.css "rel="stylesheet" />
+
+    <!-- http://jquery.com/ -->
+    <script src="js/jquery-latest.min.js"></script>
+    <!-- http://getbootstrap.com/ -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- http://1000hz.github.io/bootstrap-validator/ -->
+    <!--<script src="js/validator.js"></script>-->
+    <!-- more bootstrap validator -->
+    <script src="js/bootstrapvalidator.min.js"></script>
+
+    <script src="static/scripts.js"></script>
+    <!-- http://www.eyecon.ro/bootstrap-datepicker/ -->
+    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+
+    <title>PharmaSched</title>
+</head>
+
+<body>
+    <div class="container myContainer">
+        <div class="bg"></div>
+        <div class="jumbotron" id="jumbo">
+            <div class="container" style="text-align:center;">
+                <div>
+                    <div class="col-xs-10" style="text-align: left; float:left; font-weight:extra-bold;">
+                        <span style="font-size:3.5vw;" id="greeting"></span>
+                        <span id="hello-user" style="font-size:4vw;"></span>
+                    </div>
+                    <div class="dropdown col-xs-2" style="float:right; font-size:5vh;">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </button>
+                        <ul id="dropdown" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                            <li>
+                                <a href="#" class="btn btn-default" type="button" data-toggle="collapse" data-target="#userPreferences,#mainScreen" aria-expanded="false" aria-controls="userPreferences, mainscreen">User Preferences</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="https://github.com/tishihar94/PharmaSched" target="_blank">Source code (Github)</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size:36px; text-indent: 2em; font-size:2.7vw;">
+                <span class="inner">It is</span>
+                <span id="time" style="text-decoration:underline;"></span>
+                <span class="inner">on</span>
+                <span id="date"></span>
+            </p>
+        </div>
+    </div>
+    <br />
+
+    <!-- Medication Schedule -->
+    <div class="collapse in" id="mainScreen">
+        <div class="container myContainer pre-scrollable" style="text-align:center;">
+            <table class="table table-hover" id="doseTable" style="background-color:rgba{0,0,0,0}">
+                <thead>
+                <tr style="font-size:16px;">
+                    <th></th>
+                    <th>Medication</th>
+                    <th>Instructions</th>
+                    <th>Comments</th>
+                    <th>Next day</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="schedBody" style="text-align:left; color:rgb(85,107,47);">
+                </tbody>
+            </table>
+            <div class="collpase in" id="newDrugbtn">
+                <button class="btn btn-info" data-toggle="collapse"data-target="#addDrugFormWindow, #newDrugbtn">Add New Drug</button>
+            </div>
+
+            <!-- add new drug form -->
+            <div id="addDrugFormWindow" class="collapse">
+                <form method="post" id="addDrugForm">
+                    <div class="form-inline">
+                        <div class="col-xs-5 form-group" style="text-align:left;" >
+                            <input class="form-control" placeholder="Drug Name" id="drugName" name="drugNameForm" type="text" style="width:100%;" value="Drug Name" />
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-xs-3 col-xs-offset-1">
+                            <input type="text" class="form-control" id="startDate" placeholder="Start Date" name="startDateForm" />
+                        </div>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" id="endDate" name="endDateForm" placeholder="End Date" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-xs-9 form-group selectFromFont" style="float:left; text-align:left">
+                            <select class="1-12" id="numDoses"></select>
+                            <select class="methods " id="intakeMethod">
+                                <option value="pill(s)">pill(s)</option>
+                                <option value="capsule(s)">capsule(s)</option>
+                                <option value="shot(s)">shot(s)</option>
+                                <option value="puff(s)">puff(s)</option>
+                                <option value="drop(s)">drop(s)</option>
+                                <option value="spray(s)">spray(s)</option>
+                                <option value="dose(s)">dose(s)</option>
+                            </select>
+                            <span class="inner" style="font-weight: bold;">,&nbsp;</span>
+                            <select class="1-12" id="timesPerDay"></select>
+                            <span class="inner" accesskey="" style="font-weight: bold; color: rgb(245,255,250);">&nbsp;times every &nbsp;</span>
+                            <select class="1-12" id="frequency"></select>
+                            <select id="timePeriod">
+                                <option value="day(s)">day(s)</option>
+                                <option value="week(s)">week(s)</option>
+                                <option value="month(s)">month(s)</option>
+                                <option value="year(s)">year(s)</option>
+                            </select>
+                                <input type="checkbox" id="asNeeded" /><span style="color: rgb(245,255,250);"> As Needed</span>
+                        </div>
+                        <div class="col-xs-3 form-group" style="float:right; text-align:right;">
+                            <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#newDrugbtn, #addDrugFormWindow" id="closeDrugFormbtn">Close</button>
+                            <button type="submit" class="btn btn-primary" data-toggle="collapse" data-target="#newDrugbtn, #addDrugFormWindow" disabled="disabled" id="addDrugtoSched">Add</button>
+                            <button type="submit" class="btn btn-primary hidden" data-toggle="collapse" data-target="#newDrugbtn, #addDrugFormWindow" id="submitEdit">Edit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User preferences -->
+    <div class="collapse" id="userPreferences">
+        <div class="container well myContainer pre-scrollable">
+            <form class="form-horizontal" id="registration" role="form" method="post">
+                <div class="form-group collapse in row-fluid" id="nameForms">
+                    <div style="float:left; text-align:center;">
+                        <label for="name" class="control-label">&nbsp;&nbsp;Your Name: </label>
+                    </div>
+                    <div class="col-xs-6">
+                        <input class="form-control" name="nameField" id="name" required type="text" />
+                    </div>
+                    <div style=" float:right;">
+                        <button class="btn btn-info" id="toggleUpdateSleepbtn" data-toggle="collapse" data-target="#sleepForm, #nameForms, #nameFormsbtns">Update Sleep Schedule?</button>
+                        &nbsp;
+                    </div>
+
+                </div>
+                <div class="row-fluid collapse in col-xs-12" id="nameFormsbtns">
+                    <div style="text-align:center; float:left;">
+                        <button class="btn btn-default" data-toggle="collapse" data-target="#userPreferences,#mainScreen">Back</button>
+                    </div>
+                    <div style="text-align:center; float:right;">
+                        <button type="submit" class="btn btn-primary" id="updateUser1" disabled="disabled">Update User</button>
+                    </div>
+                </div>
+                <div id="sleepForm" class="collapse">
+                    <div class="form-group col-xs-12">
+                        <br />
+                        <p style="font-size:16px; font-weight:Bold;">What is your sleep schedule? (00:00 ~ 23:59)</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; font-weight:bold; text-align:left;">Sundays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control wakeTimeForm" name="startTime" id="wake0" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control bedTimeForm" name="endTime" id="bed0" placeholder="Bedtime" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Mondays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake1" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed1" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Tuesdays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake2" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed2" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Wednesdays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake3" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed3" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Thursdays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake4" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed4" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Fridays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake5" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed5" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-1"></label>
+                        <label class="col-xs-2 control-label" style="font-size:14px; text-align:left;">Saturdays:&nbsp;</label>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-sun"></i>
+                                <input type="text" class="form-control" name="startTime" id="wake6" placeholder="Wakeup time" />
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon icon-moon-stroke"></i>
+                                <input type="text" class="form-control" name="endTime" id="bed6" placeholder="Bedtime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4 " style="text-align:center;">
+                            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#userPreferences,#mainScreen" aria-expanded="false" aria-controls="userPreferences">Back to schedule</button>
+                        </div>
+                        <div class="col-xs-2 col-xs-offset-1" style="text-align:center;">
+                            <button type="submit" class="btn btn-primary" id="updateUser2" disabled="disabled">Update User</button>
+                        </div>
+                        <div class="col-xs-offset-9" style="text-align:center;">
+                            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#nameForms, #sleepForm, #nameFormsbtns">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

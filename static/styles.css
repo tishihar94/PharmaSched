@@ -1,0 +1,114 @@
+html, .background{
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background: url(../images/loading.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+/**
+    https://stackoverflow.com/a/30680994/8355724
+    hides scrollbar
+*/
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px; /* remove scrollbar space */
+    background: transparent; /* optional: just make scrollbar invisible */
+}
+
+#jumbo {
+    margin-bottom: 0px;
+    max-height: 20%;
+    position: relative;
+    background: none;
+    color: white;
+    width: 100%;
+    padding: 5px;
+}
+
+.myContainer{
+    background-color: rgba(0,0,0, 0.5);
+    border-radius: 10px;
+    color: rgb(245,255,250);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#hello-user{
+    font-size: 48px;
+    color: rgb(255, 211, 71);
+}
+
+.selectFromFont {
+    color: rgb(41,46,55);
+}
+.pre-scrollable {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+/*https://stackoverflow.com/a/18839305/8355724*/
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?lx62k8');
+  src:  url('../fonts/icomoon.eot?lx62k8#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?lx62k8') format('truetype'),
+    url('../fonts/icomoon.woff?lx62k8') format('woff'),
+    url('../fonts/icomoon.svg?lx62k8#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-moon-stroke:before {
+  content: "\e900";
+    color: grey;
+}
+.icon-sun:before {
+  content: "\e9d4";
+    color: grey;
+}
+
