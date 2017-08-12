@@ -74,7 +74,7 @@ function getUserInfo() {
         setName(name);
         fillDoseSchedule(data);
         fillSleepSchedule(data);
-        addDrugForm(data);
+        addDrugForm();
         updateUserPrefs(data);
     });
 }
@@ -137,53 +137,53 @@ function nextDay(data, index, timeNow) {
     if (timeNow > endDateObj.getTime()) {
         return "expired";
     }
-    else {
-        if(data.drugs[index].asNeeded == "True") {
+    else if(data.drugs[index].asNeeded == "True") {
             return "As Needed";
+    }
+    else {
+        if (data.drugs[index].timePeriod == "day(s)") {
+            var timePeriodDays = data.drugs[index].frequency;
+
+            nextDayToTake = dayAdder(timeNow, startDateObj, timePeriodDays);
+
+            return nextDayToTake.toLocaleDateString();
+
         }
+        else if (data.drugs[index].timePeriod == "week(s)") {
+            var timePeriodDays = data.drugs[index].frequency * 7;
 
-        else {
-            if (data.drugs[index].timePeriod == "day(s)") {
-                var timePeriodDays = data.drugs[index].frequency;
+            nextDayToTake = dayAdder(timeNow, startDateObj, timePeriodDays);
 
-                nextDayToTake = dayAdder(timeNow, startDateObj, timePeriodDays);
+            return nextDayToTake.toLocaleDateString();
 
-                return nextDayToTake.toLocaleDateString();
-
-            } else if (data.drugs[index].timePeriod == "week(s)") {
-                var timePeriodDays = data.drugs[index].frequency * 7;
-
-                nextDayToTake = dayAdder(timeNow, startDateObj, timePeriodDays);
-
-                return nextDayToTake.toLocaleDateString();
-
-            } else if (data.drugs[index].timePeriod == "month(s)") {
-                while(timeNow > nextDayToTake.getTime()){
-                        var sumMonths = parseInt(nextDayToTake.getMonth()) + parseInt(data.drugs[index].frequency);
-                        nextDayToTake.setMonth(sumMonths);
-                }
-                if(nextDayToTake.getTime() > endDateObj.getTime()){
-                    return "expired";
-                }
-                else {
-                    return nextDayToTake.toLocaleDateString();
-                }
+        }
+        else if (data.drugs[index].timePeriod == "month(s)") {
+            while(timeNow > nextDayToTake.getTime()){
+                    var sumMonths = parseInt(nextDayToTake.getMonth()) + parseInt(data.drugs[index].frequency);
+                    nextDayToTake.setMonth(sumMonths);
+            }
+            if(nextDayToTake.getTime() > endDateObj.getTime()){
+                return "expired";
             }
             else {
-                while(timeNow > nextDayToTake.getTime()){
-                    var sumYears = parseInt(nextDayToTake.getFullYear()) + parseInt(data.drugs[index].frequency);
-                    nextDayToTake.setYear(sumYears);
+                return nextDayToTake.toLocaleDateString();
+            }
+        }
+        else {
+            while(timeNow > nextDayToTake.getTime()){
+                var sumYears = parseInt(nextDayToTake.getFullYear()) + parseInt(data.drugs[index].frequency);
+                nextDayToTake.setYear(sumYears);
+            }
+            if(nextDayToTake.getTime() > endDateObj.getTime()){
+                    return "expired";
                 }
-                if(nextDayToTake.getTime() > endDateObj.getTime()){
-                        return "expired";
-                    }
-                else {
-                    return nextDayToTake.toLocaleDateString();
-                }
+            else {
+                return nextDayToTake.toLocaleDateString();
             }
         }
     }
 }
+
 
 //Adds days to the currentDate
 function dayAdder(timeNow, startDateObj, timePeriodDays) {
@@ -207,19 +207,19 @@ function dayAdder(timeNow, startDateObj, timePeriodDays) {
 }
 
 function rowColor(data, index, nextDayStr, today) {
-
+    var nextDay = new Date(nextDayStr);
+    nextDay.setHours(0,0,0,0);
     if(nextDayStr === "expired") {
         return '<tr class="danger" />';
     }
     else if(nextDayStr === "As Needed") {
         return '<tr class="warning" />';
     }
+    else if(nextDay.getTime === today.getTime()) {
+        return '<tr class="success" />';
+    }
     else {
-        var nextDay = new Date(nextDayStr);
-        nextDay.setHours(0,0,0,0);
         var period = data.drugs[index].frequency;
-//        console.log("today: " + today);
-//        console.log("nextDay: " + nextDay);
         if (data.drugs[index].timePeriod == "day(s)") {
             nextDay.setDate(parseInt(nextDay.getDate()) - parseInt(period));
         }
@@ -235,11 +235,9 @@ function rowColor(data, index, nextDayStr, today) {
         }
 
         if (nextDay.getTime() === today.getTime()) {
-            console.log("yes");
             return '<tr class="success" />';
         }
         else {
-            console.log("NO");
             return '<tr />';
         }
     }
@@ -456,12 +454,11 @@ function drugPeriod() {
 
 }
 
-function addDrugForm(data) {
-
-    var drugInfo = {};
+function addDrugForm() {
 
     $('#addDrugtoSched').click(function(submit) {
         if ($('#addDrugtoSched').hasClass("disabled") == false){
+            var drugInfo = {};
             submit.preventDefault();
             drugInfo.drugName = $('#drugName').val();
             drugInfo.numDoses = $('#numDoses').val();
@@ -471,7 +468,8 @@ function addDrugForm(data) {
             drugInfo.timePeriod = $('#timePeriod').val();
             drugInfo.comments = $('#drugComment').val();
             if($('#startDate').val() == "") {
-                var today = new Date();
+                var today = new Date(Date.now());
+                today.setHours(0,0,0,0);
                 var todayJSON = today.toJSON();
 
                 drugInfo.startDate = todayJSON;
@@ -500,13 +498,32 @@ function addDrugForm(data) {
                 drugInfo.asNeeded = "False";
             }
 
-
-            data.drugs.push(drugInfo);
-            chrome.storage.sync.set({userinfo: data}, function(obj) {
-                console.log('obj');
+            chrome.storage.sync.get('userinfo', function(obj) {
+                var data = obj.userinfo;
+                data.drugs.push(drugInfo);
+                chrome.storage.sync.set({userinfo: data}, function(obj) {
+                    console.log('obj');
+                fillDoseSchedule(data);
+                });
             });
-
-            getUserInfo();
+            $('#submitEdit').addClass('hidden');
+            $('#addDrugtoSched').removeClass('hidden');
+            $('#drugComment').val("");
+            $('#drugName').val("Drug Name");
+            $('#startDate').val("");
+            $('#endDate').val("");
+            $('#numDoses').val("1");
+            $('#intakeMethod').val("pill(s)");
+            $('#frequency').val("1");
+            $('#timesPerDay').val("1");
+            $('#timePeriod').val("day(s)");
+            $('#asNeeded').prop('checked', false);
+             $('#timesPerDay').removeAttr('disabled');
+            $('#timesPerDay').css({'background-color':'white'});
+            $('#timePeriod').removeAttr('disabled');
+            $('#timePeriod').css({'background-color':'white'});
+            $('#frequency').removeAttr('disabled');
+            $('#frequency').css({'background-color':'white'});
         }
     });
 }
@@ -634,12 +651,12 @@ function deleteDrugFromSched() {
         var confirmation = confirm("Are you sure you want to delete this medication?");
         if(confirmation) {
             var deleteIndex = parseInt(this.id);
-            chrome.storage.sync.get('userinfo', function(obj) {
+            chrome.storage.sync.get('userinfo', function (obj) {
                 var data = obj.userinfo;
                 data.drugs.splice(deleteIndex, 1);
-                chrome.storage.sync.set({userinfo: data}, function(obj) {
+                chrome.storage.sync.set({userinfo: data
                 });
-
+                console.log(data);
                 fillDoseSchedule(data);
             });
         }
