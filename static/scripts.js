@@ -14,7 +14,8 @@ $(function() {
             });
         }
     });
-    var date = new Date();
+    var date = new Date(Date.now());
+    console.log(date);
     setBackground(date);
     setDate(date);
     getUserInfo();
@@ -389,17 +390,19 @@ function setBackground(date){
         $('#greeting').html("Good morning,");
         $('body').css('background','url(images/morning.jpg)');
     }
-    else if (10 <= currentTime && currentTime < 14){
+    else if (10 <= currentTime && currentTime < 17){
         $('#greeting').html("Good afternoon,");
         $('body').css('background-image','url(images/day.jpg)');
     }
     else if (17 <= currentTime && currentTime < 19){
         $('#greeting').html("Good evening,");
         $('body').css('background-image','url(images/sunset.jpg)');
+
     }
     else{
         $('#greeting').html("Good evening,");
         $('body').css('background-image','url(images/night.jpg)');
+
     }
 }
 
